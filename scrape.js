@@ -1,4 +1,4 @@
-var casper = require('casperjs').create({
+var casper = require('casper').create({
   verbose: true,
   logLevel: 'debug',
   pageSettings: {
@@ -6,8 +6,12 @@ var casper = require('casperjs').create({
   }
 });
 
-function getStats() {
-  var url = 'sports.yahoo.com/nfl/players';
-}
+var url = 'http://sports.yahoo.com/nfl/players';
 
-module.exports.getStats = getStats;
+casper.start(url);
+
+casper.then(function() {
+  this.echo(this.getTitle(), 'GREEN_BAR');
+});
+
+casper.run();
