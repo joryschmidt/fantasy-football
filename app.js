@@ -4,9 +4,9 @@ var bodyParser = require('body-parser');
 var path = require('path');
 
 // Connect to the MongoDB database
-// var mongoose = require('mongoose');
-// var db = "mongodb://" + process.env.IP + "/fantasy";
-// mongoose.connect(db);
+var mongoose = require('mongoose');
+var db = "mongodb://" + process.env.IP + "/fantasy";
+mongoose.connect(db);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
