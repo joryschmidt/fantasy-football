@@ -16,7 +16,10 @@ var k = new mongoose.Schema({
     required: true
   }, 
   injured: Boolean,
-  flex: Boolean,
+  flex: {
+    type: Boolean,
+    default: false
+  },
   price: Number,
   stats: {
     fg: {

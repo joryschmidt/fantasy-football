@@ -16,42 +16,45 @@ var qb = new mongoose.Schema({
     required: true
   },
   injured: Boolean,
-  flex: Boolean,
+  flex: {
+    type: Boolean, 
+    default: false
+  },
   price: Number,
   stats: {
-    rushing_touchdowns: {
-      type: Number,
-      default: 0
+    rushing: {
+      touchdowns: {
+        type: Number,
+        default: 0
+      },
+      attempts: {
+        type: Number,
+        default: 0
+      },
+      yards: {
+        type: Number,
+        default: 0
+      }
     },
-    rushing_attempts: {
-      type: Number,
-      default: 0
-    },
-    rushing_yards: {
-      type: Number,
-      default: 0
-    },
-    passing_touchdowns: {
-      type: Number,
-      default: 0
-    },
-    passing_yards: {
-      type: Number,
-      default: 0
+    passing: {
+      touchdowns: {
+        type: Number,
+        default: 0
+      },
+      attempts: {
+        type: Number,
+        default: 0
+      },
+      completions: {
+        type: Number,
+        default: 0
+      },
+      yards: {
+        type: Number,
+        default: 0
+      }
     },
     fumbles: {
-      type: Number,
-      default: 0
-    },
-    fumbles_lost: {
-      type: Number,
-      default: 0
-    },
-    pass_attempts: {
-      type: Number,
-      default: 0
-    },
-    completions: {
       type: Number,
       default: 0
     },
