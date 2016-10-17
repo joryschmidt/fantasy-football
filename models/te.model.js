@@ -15,6 +15,9 @@ var te = new mongoose.Schema({
     type: String,
     required: true
   }, 
+  injured: Boolean,
+  flex: Boolean,
+  price: Number,
   stats: {
     rushing_touchdowns: {
       type: Number,

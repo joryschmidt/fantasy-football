@@ -20,6 +20,9 @@ var Player = new Schema({
     type: String,
     required: true
   }, 
+  injured: Boolean,
+  flex: Boolean,
+  price: Number,
   stats: {
     rushing_touchdowns: {
       type: Number,
