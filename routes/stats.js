@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var scrapeController = require('../controllers/scrape.controller');
+var statsController = require('../controllers/stats.controller');
 
-router.get('/', scrapeController.getStats);
+router.get('/', statsController.getStats);
 
 module.exports = router;
