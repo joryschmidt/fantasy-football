@@ -1,6 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
+// STILL NEED KICKER AND DEFENSE
+// should still add fields for injury, flex, and price
+
+
 var Player = new Schema({
   name: {
     type: String,
