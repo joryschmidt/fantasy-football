@@ -1,4 +1,5 @@
 var parseStats = require('./parse-stats');
+var webpage = require('webpage');
 
 var casper = require('casper').create({
   verbose: true,
@@ -45,6 +46,15 @@ function getLinks(selector) {
 
 casper.start().eachThen(ex_links, function(response) {
   
+  var page = webpage.create();
+  page.open(response.data, function(status) {
+    var stats = page.evaluate(function() {
+      var hrs = document.querySelectorAll('#mediasportsplayergamelog tbody');
+      
+      return hrs;
+    });
+    console.log('Stats are', stats);
+  });
   // Try using raw phantomJS with page.open() here instead to parse the html
   
   this.thenOpen(response.data, function(response) {
