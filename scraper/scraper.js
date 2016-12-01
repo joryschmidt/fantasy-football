@@ -33,7 +33,7 @@ casper.start();
 
 position_links.forEach(function(e, index, arr) {
   casper.thenOpen(e, function() { 
-    pos = e.slice(-2);
+    pos = e.match(/\w+$/)[0];
     this.echo(pos, 'RED_BAR');
   });
   
@@ -47,8 +47,8 @@ position_links.forEach(function(e, index, arr) {
     links.forEach(function(e, index, arr) {
       arr[index] = 'http://sports.yahoo.com' + e;
     });
-    links.forEach(function(e, index, arr) {
-      if (e.search(/teams/) != -1) links.splice(index, 1);
+    links = links.filter(function(e) {
+      return e.search(/teams/) === -1; 
     });
     links = shuffleArray(links);
   });
@@ -87,4 +87,8 @@ position_links.forEach(function(e, index, arr) {
   });
 });
 
-casper.run();
+casper.run(function() {
+  this.echo(links.length + ' found', 'WARNING');
+  this.echo(' - '+links.join('\n - '));
+  this.exit();
+});
