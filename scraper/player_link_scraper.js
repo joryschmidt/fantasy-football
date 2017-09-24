@@ -1,6 +1,7 @@
 var parseStats = require('./parse-stats');
 var prepareData = require('./prepare-data');
 var shuffleArray = require('./shuffle-array');
+var fs = require('fs');
 
 var casper = require('casper').create({
   verbose: true,
@@ -12,7 +13,6 @@ var casper = require('casper').create({
 
 var links = [];
 var team_links = [];
-var try_later_array = [];
 
 var url = 'https://sports.yahoo.com/nfl/players/';
 
@@ -27,7 +27,7 @@ function getLinks(selector) {
 casper.start();
 
 casper.open(url).then(function() {
-  this.echo(this.getTitle(), 'INFO');
+  this.echo(this.getTitle(), 'GREEN_BAR');
   casper.then(function createTeamLinksArray() {
     this.waitForSelector('.ys-players-index', function() {
       team_links = this.evaluate(getLinks, '.ys-players-index div a');
@@ -41,8 +41,6 @@ casper.then(function processTeamLinks() {
     arr[index] = 'https://sports.yahoo.com' + e;
   });
   team_links = shuffleArray(team_links);
-  
-        team_links = team_links.slice(0, 4);
 });
 
 casper.then(function goToTeamPages() {
@@ -61,14 +59,13 @@ casper.then(function() {
   links.forEach(function(e, index, arr) {
     arr[index] = 'https://sports.yahoo.com' + e + 'gamelog';
   });
+  
+  fs.write('player_links.js', "module.exports = '" + links.toString() + "'.split(',');");
 });
 
 casper.run(function() {
-  this.echo(team_links.length + ' found', 'WARNING');
-  this.echo(' - '+ team_links.join('\n - '));
-  this.exit();
-  this.echo(links.length + ' found', 'WARNING');
-  this.echo(' - '+ links.join('\n - '));
+  this.echo(team_links.length + ' teams found', 'GREEN_BAR');
+  this.echo(links.length + ' players found', 'RED_BAR');
   this.exit();
 });
 
