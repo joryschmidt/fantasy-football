@@ -1,5 +1,3 @@
-var parseStats = require('./parse-stats');
-var prepareData = require('./prepare-data');
 var shuffleArray = require('./shuffle-array');
 var fs = require('fs');
 
@@ -26,6 +24,7 @@ function getLinks(selector) {
 
 casper.start();
 
+// Get links for all NFL team rosters
 casper.open(url).then(function() {
   this.echo(this.getTitle(), 'GREEN_BAR');
   casper.then(function createTeamLinksArray() {
@@ -43,6 +42,7 @@ casper.then(function processTeamLinks() {
   team_links = shuffleArray(team_links);
 });
 
+// Go to team pages and get links for first twenty players on page, should include QB, WR, RB, and TE
 casper.then(function goToTeamPages() {
   casper.each(team_links, function openTeamPage(self, link) {
     self.thenOpen(link, function getPlayerLinks() {
@@ -55,6 +55,7 @@ casper.then(function goToTeamPages() {
   });
 });
 
+// Process player links and write them to player_links.js
 casper.then(function() { 
   links.forEach(function(e, index, arr) {
     arr[index] = 'https://sports.yahoo.com' + e + 'gamelog';
@@ -68,38 +69,3 @@ casper.run(function() {
   this.echo(links.length + ' players found', 'RED_BAR');
   this.exit();
 });
-
-
-  
-//   casper.then(function goThroughLinks() {
-//     this.eachThen(links, function grabLinkData(response) {
-//       this.echo(response.data, 'INFO');
-//       this.thenOpen(response.data, function getAllTheStats() {
-//         this.waitForSelector('#mediasportsplayergamelog', function afterWaiting() {
-//           this.wait(Math.random() * 3000 + 2000);
-//           var title = this.getTitle().match(/\w+\s\w+/g);
-//           var stats = this.evaluate(parseStats);
-//           prepareData(title, stats, pos);
-//         }, function tryLater() {
-//           try_later_array.push(response.data);
-//         });
-//       });
-//     });
-//   });
-  
-//   casper.then(function tryOnceMore() {
-//     while(try_later_array.length > 0) {
-//       this.echo(try_later_array, 'WARNING');
-//       this.thenOpen(try_later_array[0], function() {
-//         this.waitForSelector('#mediasportsplayergamelog', function() {
-//           this.wait(Math.random() * 3000 + 2000);
-//           var title = this.getTitle().match(/\w+\s\w+/g);
-//           var stats = this.evaluate(parseStats);
-//           prepareData(title, stats, pos);
-//         }, function() {
-//           try_later_array.push(try_later_array[0]);
-//         });
-//       });
-//       try_later_array.shift();
-//     }
-//   });
