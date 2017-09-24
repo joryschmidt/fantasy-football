@@ -1,7 +1,24 @@
 var parseStats = require('./parse-stats');
 var prepareData = require('./prepare-data');
+var players = require('./player_links.js');
+
+var fs = require('fs');
+
+var casper = require('casper').create({
+  verbose: true,
+  logLevel: 'debug',
+  pageSettings: {
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4'
+  }
+});
+
+casper.start();
 
 
+casper.run(function() {
+  this.echo('Casper done', 'WARN_BAR');
+  this.exit();
+});
 //   casper.then(function goThroughLinks() {
 //     this.eachThen(links, function grabLinkData(response) {
 //       this.echo(response.data, 'INFO');

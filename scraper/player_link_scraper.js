@@ -42,13 +42,13 @@ casper.then(function processTeamLinks() {
   team_links = shuffleArray(team_links);
 });
 
-// Go to team pages and get links for first twenty players on page, should include QB, WR, RB, and TE
+// Go to team pages and get links for first twenty five players on page, should include QB, WR, RB, and TE
 casper.then(function goToTeamPages() {
   casper.each(team_links, function openTeamPage(self, link) {
     self.thenOpen(link, function getPlayerLinks() {
       this.waitForSelector('.ys-roster-table', function() {
         var team = this.evaluate(getLinks, '.ys-roster-table table td a');
-        team = team.slice(0, 20);
+        team = team.slice(0, 25);
         links = links.concat(team);
       });
     });
