@@ -1,53 +1,41 @@
 var parseStats = function() {
+  
+  // First check if they have stats at all and if they have stats for this year
+  var table = document.querySelector('.ys-graph-stats table');
+  if (!table) return null; 
 
-  // this function determines the unique stat types based on the Yahoo data structure
-  var determineStatType = function(classData) {
-    var stat_types = {
-      opponent: 'Opponent',
-      date: 'Date',
-      score: 'Score',
-      105: 'Passing Yards',
-      108: 'Passing Touchdowns',
-      203: 'Rushing Yards',
-      205: 'Rushing Average',
-      206: 'Rushing Long',
-      207: 'Rushing Touchdowns',
-      303: 'Receiving Yards',
-      305: 'Receiving Average',
-      306: 'Receiving Long',
-      309: 'Receiving Touchdowns'
-    };
-    
-    for (var type in stat_types) {
-      var regex = new RegExp(type);
-      if (classData.search(regex) !== -1) return stat_types[type];
-    }
-    
-    return false;
-  };
+  var year = document.querySelector('.ys-graph-stats select').textContent.slice(0,4);
+  if (year != "2017") return null;
 
-  // this loops through each week and then the stats each week to produce an object for that weeks stats
-  var total_stats = {};
-  var table = document.querySelector('#mediasportsplayergamelog tbody');
-  var games = table.children;
-  for (var i = 0; i < games.length; i++) {
-    var game = games[i].children;
+  // Add position to statsObj
+  var total_stats_obj = {};
+  var pos = document.querySelector('.ys-player-header .Row').textContent.match(/\b[^\d\W]{2}\b/)[0];
+  total_stats_obj['Position'] = pos;
+  
+  
+  var stat_cats = table.children[0]; // table head
+  
+  // Make an array that provides the names of each stat
+  var stat_specs = stat_cats.children[1];
+  var stat_specs_arr = [];
+  for (var i=0; i<stat_specs.children.length; i++) {
+    stat_specs_arr.push(stat_specs.children[i].title);
+  }
+  
+  var games = table.children[1]; // table body
+  
+  // Loop through every game week and create stats for that week attributed to the date
+  for (var i = 0; i < games.children.length; i++) {
+    var game = games.children[i].children;
     var statsObj = {};
     for (var j = 0; j < game.length; j++) {
-      var stat = game[j];
-      var stat_type = determineStatType(stat.className);
-      if (stat_type) {
-        if (stat_type === 'Score') statsObj[stat_type] = stat.children[0].innerHTML;
-        else statsObj[stat_type] = stat.innerHTML;
-      }
-      else {
-        var stat_title = stat.getAttribute('title');
-        statsObj[stat_title] = stat.innerHTML;
-      }
+      var stat_value = game[j].textContent;
+      statsObj[stat_specs_arr[j]] = stat_value;
     }
-    total_stats[statsObj['Date']] = statsObj;
+    total_stats_obj[statsObj['Date']] = statsObj;
   }
-  return total_stats;
+  
+  return total_stats_obj;
 };
 
 module.exports = parseStats;

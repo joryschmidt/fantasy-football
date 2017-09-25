@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var casper = require('casper').create({
   verbose: true,
-  logLevel: 'debug',
+  logLevel: 'info',
   pageSettings: {
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4'
   }
@@ -67,5 +67,6 @@ casper.then(function() {
 casper.run(function() {
   this.echo(team_links.length + ' teams found', 'GREEN_BAR');
   this.echo(links.length + ' players found', 'RED_BAR');
+  fs.write('casper_log.json', this.result.log);
   this.exit();
 });
