@@ -2,3 +2,5 @@ scraper/QB/
 scraper/RB/
 scraper/TE/
 scraper/WR/
+scraper/active_players.js
+scraper/unretrieved_players.js
