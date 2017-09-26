@@ -5,7 +5,7 @@ var prepareData = function(name, team, stats) {
   stats['Player'] = name;
   stats['Team'] = team;
   
-  fs.write(pos+'/'+name.replace(/\s/, '_').toLowerCase()+'.json', JSON.stringify(stats));
+  fs.write('data/'+pos+'/'+name.replace(/\s/, '_').toLowerCase()+'.json', JSON.stringify(stats));
 };
 
 module.exports = prepareData;

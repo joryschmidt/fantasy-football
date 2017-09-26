@@ -2,7 +2,7 @@ var parseStats = require('./parse-stats');
 var prepareData = require('./prepare-data');
 var players = require('./player_links.js');
 
-        players = players.slice(75, 90);
+        // players = players.slice(75, 90);
 
 var fs = require('fs');
 

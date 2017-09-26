@@ -1,6 +1,3 @@
-scraper/QB/
-scraper/RB/
-scraper/TE/
-scraper/WR/
+scraper/data/
 scraper/active_players.js
 scraper/unretrieved_players.js
