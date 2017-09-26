@@ -1,8 +1,6 @@
 var fs = require('fs');
 
-var prepareData = function(title, stats) {
-  var name = title[0];
-  var team = title[1];
+var prepareData = function(name, team, stats) {
   var pos = stats['Position'];
   stats['Player'] = name;
   stats['Team'] = team;

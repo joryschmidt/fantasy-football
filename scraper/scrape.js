@@ -2,7 +2,7 @@ var parseStats = require('./parse-stats');
 var prepareData = require('./prepare-data');
 var players = require('./player_links.js');
 
-        players = players.slice(-25,-24);
+        players = players.slice(75, 90);
 
 var fs = require('fs');
 
@@ -16,6 +16,7 @@ var casper = require('casper').create({
 });
 
 var unretrieved_players = [];
+var active_players = {};
 
 casper.start();
 
@@ -24,11 +25,17 @@ casper.then(function goToPlayerPages() {
   casper.each(players, function openPlayerStatsPage(self, link) {
     self.thenOpen(link, function getPlayerStats() {
       this.waitForSelector('#Main', function() {
-        var title = this.getTitle().match(/\w+\s\w+/g);
+        var title = this.getTitle().match(/([\w\s\-.]+)\|/g);
+        var name = title[0].replace(/\|/, '').trim();
+        var team = title[1].replace(/\|/, '').trim();
         var stats = this.evaluate(parseStats);
         if (stats) {
-          prepareData(title, stats);
-          require('utils').dump(stats);
+          // Write data to file under position folder and firstName_lastName.json
+          prepareData(name, team, stats);
+          active_players[name] = link;
+          this.echo(name + ' saved', 'GREEN_BAR');
+        } else {
+          this.echo(name + ' has no stats', 'RED_BAR');
         }
       }, function timeOut(){
         unretrieved_players.push(link);
@@ -38,8 +45,9 @@ casper.then(function goToPlayerPages() {
 });
 
 casper.run(function() {
-  this.echo('Casper done', 'WARN_BAR');
+  this.echo('Casper Done', 'INFO');
   this.exit();
   require('utils').dump(unretrieved_players);
+  fs.write('active_players.js', 'module.exports = ' + JSON.stringify(active_players));
   fs.write('unretrieved_players.js', unretrieved_players);
 });
